@@ -1,0 +1,71 @@
+@model NguoiHocDanhSachViewModel
+@{
+    ViewData["Title"] = "Người học";
+}
+
+<div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-3">
+    <h1 class="h3 mb-0">Người học <span class="badge bg-secondary">@Model.TongSo</span></h1>
+    <div>
+        <a class="btn btn-outline-primary" asp-action="NhapCsv">Nhập từ CSV</a>
+        <a class="btn btn-primary" asp-action="Create">+ Thêm người học</a>
+    </div>
+</div>
+
+<form method="get" class="row g-2 mb-3">
+    <div class="col-sm-6 col-md-4">
+        <input type="text" name="q" value="@Model.TuKhoa" class="form-control" placeholder="Tìm theo mã hoặc họ tên" />
+    </div>
+    <div class="col-auto">
+        <button type="submit" class="btn btn-outline-secondary">Tìm</button>
+        @if (!string.IsNullOrEmpty(Model.TuKhoa)) { <a class="btn btn-link" asp-action="Index">Xóa bộ lọc</a> }
+    </div>
+</form>
+
+@if (Model.Items.Count == 0)
+{
+    <div class="alert alert-info">
+        @(string.IsNullOrEmpty(Model.TuKhoa) ? "Chưa có người học nào." : "Không tìm thấy người học phù hợp.")
+    </div>
+}
+else
+{
+    <div class="table-responsive">
+        <table class="table table-hover align-middle">
+            <thead class="table-light">
+                <tr><th>Mã</th><th>Họ tên</th><th>Ngày sinh</th><th>Email</th><th>Điện thoại</th><th></th></tr>
+            </thead>
+            <tbody>
+            @foreach (var n in Model.Items)
+            {
+                <tr>
+                    <td><code>@n.MaNguoiHoc</code></td>
+                    <td>@n.HoTen</td>
+                    <td>@(n.NgaySinh?.ToString("dd/MM/yyyy"))</td>
+                    <td>@n.Email</td>
+                    <td>@n.SoDienThoai</td>
+                    <td class="text-end"><a class="btn btn-sm btn-outline-secondary" asp-action="Edit" asp-route-id="@n.Id">Sửa</a></td>
+                </tr>
+            }
+            </tbody>
+        </table>
+    </div>
+
+    @if (Model.TongTrang > 1)
+    {
+        <nav aria-label="Phân trang">
+            <ul class="pagination">
+                <li class="page-item @(Model.Trang <= 1 ? "disabled" : "")">
+                    <a class="page-link" asp-action="Index" asp-route-q="@Model.TuKhoa" asp-route-trang="@(Model.Trang - 1)">Trước</a>
+                </li>
+                <li class="page-item disabled"><span class="page-link">Trang @Model.Trang / @Model.TongTrang</span></li>
+                <li class="page-item @(Model.Trang >= Model.TongTrang ? "disabled" : "")">
+                    <a class="page-link" asp-action="Index" asp-route-q="@Model.TuKhoa" asp-route-trang="@(Model.Trang + 1)">Sau</a>
+                </li>
+            </ul>
+        </nav>
+    }
+}
+<p class="text-muted small">
+    Thông tin cá nhân của người học chỉ lưu trong cơ sở dữ liệu của hệ thống, không đưa lên blockchain.
+    Chỉ nhập thông tin mà người học đã đồng ý cung cấp.
+</p>

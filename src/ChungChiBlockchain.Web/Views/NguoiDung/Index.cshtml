@@ -1,0 +1,60 @@
+@using System.Security.Claims
+@using ChungChiBlockchain.Web.Services
+@model List<NguoiDungItem>
+@{
+    ViewData["Title"] = "Người dùng";
+    var toi = User.FindFirstValue(ClaimTypes.NameIdentifier);
+}
+
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <h1 class="h3 mb-0">Người dùng</h1>
+    <a class="btn btn-outline-primary" asp-controller="TaiKhoanHocVien" asp-action="Create">Cấp tài khoản người học</a>
+    <a class="btn btn-primary" asp-action="Create">+ Thêm người dùng</a>
+</div>
+
+<div class="table-responsive">
+    <table class="table table-hover align-middle">
+        <thead class="table-light">
+            <tr><th>Tên đăng nhập</th><th>Họ tên</th><th>Vai trò</th><th>Tổ chức</th><th>Trạng thái</th><th></th></tr>
+        </thead>
+        <tbody>
+        @foreach (var u in Model)
+        {
+            var laToi = toi == u.Id.ToString();
+            <tr>
+                <td><code>@u.TenDangNhap</code>@if (laToi) { <span class="badge bg-info text-dark ms-1">Bạn</span> }</td>
+                <td>
+                    <div>@u.HoTen</div>
+                    @if (!string.IsNullOrEmpty(u.Email)) { <div class="small text-muted">@u.Email</div> }
+                </td>
+                <td>@u.TenVaiTro</td>
+                <td>@u.TenToChuc</td>
+                <td>
+                    @if (u.TrangThai) { <span class="badge bg-success">Hoạt động</span> }
+                    else { <span class="badge bg-danger">Đã khóa</span> }
+                </td>
+                <td class="text-end text-nowrap">
+                    <a class="btn btn-sm btn-outline-secondary" asp-action="Edit" asp-route-id="@u.Id">Sửa</a>
+                    @if (!laToi)
+                    {
+                        <form asp-action="DoiTrangThai" method="post" class="d-inline">
+                            <input type="hidden" name="id" value="@u.Id" />
+                            <input type="hidden" name="hoatDong" value="@(u.TrangThai ? "false" : "true")" />
+                            <button type="submit" class="btn btn-sm btn-outline-primary">@(u.TrangThai ? "Khóa" : "Mở khóa")</button>
+                        </form>
+                        <form asp-action="DatLaiMatKhau" method="post" class="d-inline"
+                              onsubmit="return confirm('Đặt lại mật khẩu của @u.TenDangNhap? Mật khẩu cũ sẽ không dùng được nữa.');">
+                            <input type="hidden" name="id" value="@u.Id" />
+                            <button type="submit" class="btn btn-sm btn-outline-warning">Đặt lại mật khẩu</button>
+                        </form>
+                    }
+                </td>
+            </tr>
+        }
+        </tbody>
+    </table>
+</div>
+<p class="text-muted small">
+    Khóa tài khoản có hiệu lực ngay, kể cả phiên đang đăng nhập. Bạn không thể tự khóa chính mình.
+    Muốn đổi mật khẩu của chính bạn, dùng mục "Đổi mật khẩu" trên thanh trên cùng.
+</p>

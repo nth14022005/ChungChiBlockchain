@@ -1,0 +1,67 @@
+@using ChungChiBlockchain.Web.Services
+@model List<ToChucItem>
+@{
+    ViewData["Title"] = "Tổ chức";
+}
+
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <h1 class="h3 mb-0">Tổ chức cấp chứng chỉ</h1>
+    <a class="btn btn-primary" asp-action="Create">+ Thêm tổ chức</a>
+</div>
+
+@if (Model.Count == 0)
+{
+    <div class="alert alert-info">Chưa có tổ chức nào. Bấm "Thêm tổ chức" để bắt đầu.</div>
+}
+else
+{
+    <div class="table-responsive">
+        <table class="table table-hover align-middle">
+            <thead class="table-light">
+                <tr>
+                    <th>Mã</th>
+                    <th>Tên tổ chức</th>
+                    <th>Liên hệ</th>
+                    <th class="text-center">Nhân viên</th>
+                    <th class="text-center">Ví</th>
+                    <th>Trạng thái</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+            @foreach (var t in Model)
+            {
+                <tr>
+                    <td><code>@t.MaToChuc</code></td>
+                    <td>
+                        <div>@t.TenToChuc</div>
+                        @if (!string.IsNullOrEmpty(t.DiaChi)) { <div class="small text-muted">@t.DiaChi</div> }
+                    </td>
+                    <td class="small">
+                        @t.EmailLienHe
+                        @if (!string.IsNullOrEmpty(t.Website)) { <div>@t.Website</div> }
+                    </td>
+                    <td class="text-center">@t.SoNhanVien</td>
+                    <td class="text-center">@t.SoVi</td>
+                    <td><span class="badge @TrangThaiToChuc.MauBadge(t.TrangThai)">@TrangThaiToChuc.Nhan(t.TrangThai)</span></td>
+                    <td class="text-end text-nowrap">
+                        <a class="btn btn-sm btn-outline-secondary" asp-action="Edit" asp-route-id="@t.Id">Sửa</a>
+                        @foreach (var tt in TrangThaiToChuc.TatCa.Where(x => x != t.TrangThai))
+                        {
+                            <form asp-action="DoiTrangThai" method="post" class="d-inline">
+                                <input type="hidden" name="id" value="@t.Id" />
+                                <input type="hidden" name="trangThai" value="@tt" />
+                                <button type="submit" class="btn btn-sm btn-outline-primary">→ @TrangThaiToChuc.Nhan(tt)</button>
+                            </form>
+                        }
+                    </td>
+                </tr>
+            }
+            </tbody>
+        </table>
+    </div>
+    <p class="text-muted small">
+        Tổ chức "Tạm khóa" hoặc "Chờ duyệt": nhân viên của tổ chức không đăng nhập được (có hiệu lực ngay).
+        Mã tổ chức nằm trong mã của mọi chứng chỉ nên không đổi được sau khi tạo.
+    </p>
+}

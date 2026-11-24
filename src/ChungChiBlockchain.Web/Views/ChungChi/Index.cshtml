@@ -1,0 +1,35 @@
+@inject ChungChiBlockchain.Web.Services.Blockchain.IBlockchainService Chain
+@inject Microsoft.Extensions.Configuration.IConfiguration Config
+@model IReadOnlyList<ChungChiBlockchain.Web.Services.ChungChi.ChungChiDanhSachItem>
+@{ ViewData["Title"] = "Chứng chỉ"; }
+<div class="d-flex justify-content-between mb-3"><h1 class="h3">Chứng chỉ (@Model.Count)</h1><a class="btn btn-primary" asp-action="TaoLo">Tạo lô nháp</a></div>
+@if(Chain.LaGiaLap){
+<div class="alert alert-warning">Phát hành/thu hồi ở chế độ GIẢ LẬP. Tải lại trang sau vài giây để cập nhật giao dịch. Các chứng chỉ trong lô được xử lý riêng từng giao dịch.</div>
+@foreach(var batch in Model.Where(c=>c.TrangThai=="nhap" && c.LoId!=null).GroupBy(c=>c.LoId)){
+<form asp-action="PhatHanh" method="post" class="d-inline-block mb-3 me-2"><input type="hidden" name="loId" value="@batch.Key"/><button class="btn btn-outline-primary">Phát hành lô #@batch.Key (@batch.Count() bản nháp)</button></form>
+}
+}
+else {<div class="alert alert-info">Đang cấp mới trên testnet. Chọn MetaMask ở từng chứng chỉ; mỗi lần cấp/thu hồi cần ký riêng. Chứng chỉ giả lập cũ vẫn giữ nguồn xác minh ban đầu.</div>}
+<div class="table-responsive"><table class="table align-middle"><thead><tr><th>Mã</th><th>Người học / khóa học</th><th>Trạng thái</th><th>Thao tác</th></tr></thead><tbody>
+@foreach(var c in Model){
+<tr><td><code>@c.MaChungChi</code></td><td>@c.HoTen<br/><small>@c.KhoaHoc</small></td><td><span class="state-pill state-@c.TrangThai">@ChungChiBlockchain.Web.Models.ViewModels.BaoCaoHoatDong.Ten(c.TrangThai)</span></td><td>
+<a class="btn btn-sm btn-outline-secondary" asp-action="TaiPdf" asp-route-id="@c.Id">Tải PDF</a>
+<a class="btn btn-sm btn-outline-primary" asp-controller="Blockchain" asp-action="ChungChi" asp-route-id="@c.Id">MetaMask / Giao dịch</a>
+<a class="btn btn-sm btn-outline-secondary" href="/verify/@c.MaChungChi">Xác minh</a>
+@if (c.TrangThai is "da_ghi_chuoi" or "thu_hoi")
+{
+    var shareUrl = ChungChiBlockchain.Web.Services.VerificationLink.Create(Config["PublicBaseUrl"], c.MaChungChi);
+    if (shareUrl != null)
+    {
+        <button type="button" class="btn btn-sm btn-outline-primary share-link" data-url="@shareUrl">Sao chép liên kết</button>
+        <a class="btn btn-sm btn-outline-secondary" asp-action="MaQr" asp-route-id="@c.Id" target="_blank" rel="noopener">Xem QR</a>
+    }
+}
+@if(Chain.LaGiaLap && c.TrangThai=="nhap") {<form asp-action="PhatHanh" method="post" class="d-inline"><input type="hidden" name="id" value="@c.Id"/><button class="btn btn-sm btn-primary">Phát hành giả lập</button></form>}
+@if(Chain.LaGiaLap && c.TrangThai=="da_ghi_chuoi") {<details class="mt-2"><summary>Thu hồi chứng chỉ</summary><form asp-action="ThuHoi" method="post"><input type="hidden" name="id" value="@c.Id"/><label for="lydo-@c.Id">Lý do thu hồi</label><input id="lydo-@c.Id" name="lyDo" required maxlength="500" class="form-control"/><button class="btn btn-sm btn-danger mt-1">Xác nhận thu hồi giả lập</button></form></details>}
+</td></tr>}
+</tbody></table></div>
+
+<p id="share-feedback" role="status"></p>
+<input id="share-manual" aria-label="Liên kết xác minh để sao chép" class="form-control" readonly hidden />
+<script src="~/js/share-certificate.js" asp-append-version="true"></script>

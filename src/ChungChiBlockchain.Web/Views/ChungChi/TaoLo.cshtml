@@ -1,0 +1,18 @@
+@model ChungChiBlockchain.Web.Services.ChungChi.ChungChiTaoFormViewModel
+@{ ViewData["Title"] = "Tạo lô chứng chỉ nháp"; }
+<h1 class="h3 mb-3">Tạo lô chứng chỉ nháp</h1>
+<div asp-validation-summary="ModelOnly" class="text-danger"></div>
+<form asp-action="TaoLo" method="post">
+    <div class="row g-3">
+        <div class="col-md-6"><label asp-for="TenLo" class="form-label">Tên lô</label><input asp-for="TenLo" class="form-control" placeholder="Ví dụ: Khóa học tháng 10/2026" /><span asp-validation-for="TenLo" class="text-danger"></span></div>
+        <div class="col-md-3"><label asp-for="NgayCap" class="form-label">Ngày cấp</label><input asp-for="NgayCap" type="date" class="form-control" /></div>
+        <div class="col-md-3"><label asp-for="XepLoai" class="form-label">Xếp loại</label><input asp-for="XepLoai" class="form-control" /></div>
+        <div class="col-md-6"><label asp-for="KhoaHocId" class="form-label">Khóa học</label><select asp-for="KhoaHocId" asp-items="Model.KhoaHocs" class="form-select"><option value="">-- Chọn khóa học --</option></select></div>
+        <div class="col-md-6"><label asp-for="MauChungChiId" class="form-label">Mẫu chứng chỉ</label><select asp-for="MauChungChiId" asp-items="Model.MauChungChis" class="form-select"><option value="">-- Chọn mẫu --</option></select></div>
+    </div>
+    <hr class="my-4" /><h2 class="h5">Chọn người học <small class="text-muted">(tối đa 100)</small></h2>
+    <div class="mb-2"><button type="button" class="btn btn-sm btn-outline-secondary" onclick="document.querySelectorAll('input[name=\'NguoiHocIds\']').forEach(x=>x.checked=true)">Chọn tất cả</button> <button type="button" class="btn btn-sm btn-outline-secondary" onclick="document.querySelectorAll('input[name=\'NguoiHocIds\']').forEach(x=>x.checked=false)">Bỏ chọn</button></div>
+    <div class="row row-cols-1 row-cols-md-2 g-2">@foreach(var n in Model.NguoiHocs){<div class="col"><label class="border rounded p-2 d-block"><input type="checkbox" name="NguoiHocIds" value="@n.Id" @(Model.NguoiHocIds.Contains(n.Id)?"checked":"") /> <code>@n.Ma</code> - @n.HoTen</label></div>}</div>
+    <div class="mt-4"><button type="submit" class="btn btn-primary">Tạo PDF và lưu lô nháp</button> <a asp-action="Index" class="btn btn-outline-secondary">Hủy</a></div>
+</form>
+@section Scripts { <partial name="_ValidationScriptsPartial" /> }

@@ -1,0 +1,74 @@
+@{
+    var controller = ViewContext.RouteData.Values["controller"]?.ToString() ?? "";
+    var action = ViewContext.RouteData.Values["action"]?.ToString() ?? "";
+    var isAdmin = User.IsInRole(VaiTroMa.QuanTri);
+    var isStaff = User.IsInRole(VaiTroMa.ToChucCap);
+    var isLearner = User.IsInRole("nguoi_hoc");
+    var links = new List<(string Section, string Label, string Controller, string Action)> {
+        ("Tra cứu", "Trang chủ", "Home", "Index"),
+        ("Tra cứu", "Xác minh", "Verify", "Index")
+    };
+    if (isLearner) links.Add(("Cá nhân", "Chứng chỉ của tôi", "HocVien", "Index"));
+    if (isStaff) {
+        links.Add(("Cấp chứng chỉ", "Chứng chỉ", "ChungChi", "Index"));
+        links.Add(("Cấp chứng chỉ", "Mẫu chứng chỉ", "MauChungChi", "Index"));
+        links.Add(("Danh mục", "Khóa học", "KhoaHoc", "Index"));
+        links.Add(("Danh mục", "Người học", "NguoiHoc", "Index"));
+    }
+    if (isAdmin) {
+        links.Add(("Quản trị", "Tổng quan", "Admin", "Index"));
+        links.Add(("Quản trị", "Thống kê và nhật ký", "Admin", "ThongKe"));
+        links.Add(("Quản trị", "Người dùng", "NguoiDung", "Index"));
+        links.Add(("Quản trị", "Tổ chức", "ToChuc", "Index"));
+        links.Add(("Quản trị", "Ví cấp chứng chỉ", "ViCap", "Index"));
+        links.Add(("Quản trị", "Quyền ví testnet", "Blockchain", "Vi"));
+        links.Add(("Quản trị", "Loại chứng chỉ", "LoaiChungChi", "Index"));
+    }
+}
+<!DOCTYPE html>
+<html lang="vi"><head>
+<meta charset="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>@ViewData["Title"] · Xác thực chứng chỉ</title>
+<script type="importmap"></script>
+<link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css"/>
+<link rel="stylesheet" href="~/css/site.css" asp-append-version="true"/>
+<link rel="stylesheet" href="~/ChungChiBlockchain.Web.styles.css" asp-append-version="true"/>
+<link rel="stylesheet" href="~/css/so-chung-chi.css" asp-append-version="true"/>
+</head>
+<body class="registry">
+<a class="skip" href="#content">Đến nội dung chính</a>
+<aside class="rail">
+<div class="rail-top"><a class="wordmark" asp-controller="Home" asp-action="Index"><span class="crest" aria-hidden="true">✓</span><span>Xác thực chứng chỉ</span></a>
+<button class="menu-toggle" aria-controls="sections" aria-expanded="false" type="button" data-bs-toggle="collapse" data-bs-target="#sections">Menu</button></div>
+<nav id="sections" class="collapse rail-nav" aria-label="Điều hướng chính">
+@foreach(var group in links.GroupBy(l => l.Section)) {
+    <div class="nav-group"><div class="nav-label">@group.Key</div>
+    @foreach(var link in group) {
+        var selected = link.Controller == controller && (controller != "Admin" && controller != "Home" || link.Action == action)
+            || controller == "Blockchain" && (isStaff && link.Controller == "ChungChi" )
+            || controller == "TaiKhoanHocVien" && link.Controller == "NguoiDung";
+        var url = link.Controller == "Verify" ? Url.Content("~/verify") : Url.Action(link.Action,link.Controller);
+        <a href="@url" aria-current="@(selected ? "page" : null)" class="rail-link @(selected ? "on" : "")">@link.Label</a>
+    }</div>
+}
+</nav></aside>
+<div class="desk">
+<header class="topline"><span>@ViewData["Title"]</span>
+@if(User.Identity?.IsAuthenticated == true) {
+    <details class="profile"><summary>@(User.FindFirst("ho_ten")?.Value) <small>@(User.FindFirst("ten_vai_tro")?.Value)</small></summary>
+        <div class="profile-menu"><a asp-controller="Account" asp-action="ChangePassword">Đổi mật khẩu</a>
+        <form asp-controller="Account" asp-action="Logout" method="post"><button type="submit">Đăng xuất</button></form></div>
+    </details>
+} else { <a class="login-link" asp-controller="Account" asp-action="Login">Đăng nhập</a> }
+</header>
+<main id="content" class="workspace" data-controller="@controller" data-action="@action">
+@if(TempData["ThongBao"] is string success) { <div role="status" class="alert alert-success">@success</div> }
+@if(TempData["Loi"] is string error) { <div role="alert" class="alert alert-danger">@error</div> }
+@RenderBody()
+</main>
+<footer class="registry-footer"><span>© 2026 · Xác thực chứng chỉ</span><a asp-controller="Home" asp-action="Privacy">Quyền riêng tư</a></footer>
+</div>
+<script src="~/lib/jquery/dist/jquery.min.js"></script><script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+<script src="~/js/site.js" asp-append-version="true"></script><script src="~/js/so-chung-chi.js" asp-append-version="true"></script>
+@await RenderSectionAsync("Scripts", required: false)
+</body></html>

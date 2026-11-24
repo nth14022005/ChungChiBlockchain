@@ -1,0 +1,63 @@
+@model NhapCsvViewModel
+@{
+    ViewData["Title"] = "Nhập người học từ CSV";
+}
+
+<h1 class="h3 mb-3">Nhập người học từ file CSV</h1>
+
+@if (Model.DaChay && Model.ThanhCong)
+{
+    <div class="alert alert-success">
+        Đã nhập thành công <strong>@Model.SoDongNhap</strong> người học.
+        <a asp-action="Index" class="alert-link">Xem danh sách</a>
+    </div>
+}
+else if (Model.DaChay)
+{
+    <div class="alert alert-danger">
+        @Model.ThongBaoChung
+        @if (Model.TongSoLoi > 0) { <div class="mt-1">Tổng số dòng lỗi: <strong>@Model.TongSoLoi</strong>.</div> }
+    </div>
+    @if (Model.Loi.Count > 0)
+    {
+        <div class="table-responsive mb-3">
+            <table class="table table-sm table-bordered">
+                <thead class="table-light"><tr><th style="width:90px">Dòng</th><th>Lỗi</th></tr></thead>
+                <tbody>
+                @foreach (var l in Model.Loi)
+                {
+                    <tr><td>@l.Dong</td><td>@l.ThongBao</td></tr>
+                }
+                </tbody>
+            </table>
+            @if (Model.TongSoLoi > Model.Loi.Count)
+            {
+                <div class="small text-muted">Chỉ hiển thị @Model.Loi.Count lỗi đầu tiên.</div>
+            }
+        </div>
+    }
+}
+
+<div class="row"><div class="col-lg-8">
+<div class="card mb-3"><div class="card-body small">
+    <p class="mb-1"><strong>Định dạng file</strong> (UTF-8, phân cách bằng dấu phẩy hoặc chấm phẩy, dòng đầu là tiêu đề):</p>
+    <code>ma_nguoi_hoc, ho_ten, ngay_sinh, email, so_dien_thoai</code>
+    <ul class="mt-2 mb-0">
+        <li>Bắt buộc: <code>ma_nguoi_hoc</code> và <code>ho_ten</code>. Các cột còn lại có thể để trống.</li>
+        <li>Ngày sinh dạng <code>dd/MM/yyyy</code> hoặc <code>yyyy-MM-dd</code>.</li>
+        <li>Tối đa @ChungChiBlockchain.Web.Services.NguoiHocService.SoDongToiDa dòng và 1 MB mỗi lần.</li>
+        <li><strong>Tất cả hoặc không gì cả</strong>: còn một dòng lỗi thì không nhập dòng nào.</li>
+        <li>Mã đã tồn tại trong tổ chức của bạn bị coi là lỗi (không ghi đè dữ liệu cũ).</li>
+    </ul>
+    <a asp-action="MauCsv" class="btn btn-sm btn-outline-secondary mt-2">Tải file mẫu</a>
+</div></div>
+
+<form asp-action="NhapCsv" method="post" enctype="multipart/form-data">
+    <div class="mb-3">
+        <label for="file" class="form-label">Chọn file CSV</label>
+        <input type="file" id="file" name="file" class="form-control" accept=".csv,.txt,text/csv" required />
+    </div>
+    <button type="submit" class="btn btn-primary">Nhập</button>
+    <a class="btn btn-link" asp-action="Index">Về danh sách</a>
+</form>
+</div></div>

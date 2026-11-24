@@ -1,0 +1,22 @@
+@model ViCapFormViewModel
+@{
+    ViewData["Title"] = "Sửa nhãn ví";
+}
+
+<h1 class="h3 mb-3">Sửa nhãn ví</h1>
+<div class="row"><div class="col-lg-7">
+<form asp-action="Edit" method="post">
+    <input type="hidden" name="id" value="@Model.Id" />
+    <div class="mb-3">
+        <label class="form-label">Địa chỉ ví</label>
+        <input class="form-control font-monospace" value="@Model.DiaChiVi" readonly />
+        <div class="form-text">Địa chỉ ví không sửa được. Cần ví khác thì thêm ví mới.</div>
+    </div>
+    <div class="mb-3">
+        <label for="nhan" class="form-label">Nhãn (tên gợi nhớ)</label>
+        <input id="nhan" name="nhan" class="form-control" value="@Model.Nhan" maxlength="100" autofocus />
+    </div>
+    <button type="submit" class="btn btn-primary">Lưu</button>
+    <a class="btn btn-link" asp-action="Index">Hủy</a>
+</form>
+</div></div>

@@ -1,0 +1,124 @@
+:root {--pine:#173e37;--dark:#132f2c;--ink:#183332;--mute:#526866;--paper:#fbfcf8;--line:#d7e1d9;--mint:#e6f2e9;--gold:#dfc583;--accent:#1c6651}
+html{min-height:100%;font-size:16px}
+body.registry{margin:0;color:var(--ink);background:#f3f5ef;font-family:"Segoe UI",system-ui,sans-serif}
+.registry *{box-sizing:border-box}
+.registry a{color:#14624d}
+.registry :focus-visible{outline:3px solid #d09833;outline-offset:3px}
+.skip{position:fixed;left:12px;top:-5rem;z-index:99;background:white;padding:.6rem}
+.skip:focus{top:.5rem}
+.rail{width:238px;background:var(--dark);color:white;position:fixed;inset:0 auto 0 0;overflow-y:auto;z-index:20;background-image:radial-gradient(ellipse at 0 100%,#245344 0,transparent 57%)}
+.rail-top{padding:27px 18px;border-bottom:1px solid #ffffff24}
+.registry .wordmark{display:flex;gap:10px;color:#fff;align-items:center;font-family:Georgia,serif;font-size:1.16rem;text-decoration:none}
+.crest{width:32px;height:38px;display:grid;place-items:center;border:1px solid #dcc48d;border-radius:4px 4px 13px 13px;color:var(--gold);font:bold 19px system-ui}
+.menu-toggle{display:none}
+.nav-group{margin:22px 13px}
+.nav-label{font-size:.72rem;font-weight:650;letter-spacing:.075em;text-transform:uppercase;color:#aac3b6;padding:0 12px 7px}
+.registry .rail-link{display:block;border-inline-start:3px solid transparent;color:#e3ede5;text-decoration:none;padding:9px 12px;border-radius:5px;font-size:.94rem}
+.registry .rail-link:hover{background:#ffffff12}
+.registry .rail-link.on{background:#33584b;color:#fff;border-color:var(--gold)}
+.desk{margin-left:238px;display:flex;flex-direction:column;min-height:100vh}
+.topline,.registry-footer{display:flex;align-items:center;justify-content:space-between;gap:1rem;padding:15px clamp(18px,3.5vw,56px);font-size:.88rem}
+.topline{min-height:63px;background:#ffffffd9;border-bottom:1px solid var(--line);color:var(--mute)}
+.profile{position:relative;z-index:10}.profile summary{cursor:pointer;font-weight:650;color:var(--ink)}
+.profile summary small{font-weight:500;margin-inline-start:.4rem;color:var(--mute)}
+.profile-menu{position:absolute;right:0;min-width:165px;border:1px solid var(--line);background:white;border-radius:10px;padding:7px;box-shadow:0 12px 24px #0a322018}
+.profile-menu :is(a,button){display:block;padding:8px;color:var(--ink);text-decoration:none;border:0;background:none;width:100%;text-align:left}
+.profile-menu :is(a,button):hover{background:var(--mint)}
+.workspace{width:100%;max-width:1480px;min-width:0;margin:0 auto;padding:clamp(24px,3.5vw,56px);flex:1}
+.registry-footer{border-top:1px solid var(--line);color:var(--mute);flex-wrap:wrap;font-size:.82rem}
+.registry h1,.registry .h3{font:500 clamp(1.9rem,3.6vw,3.05rem)/1.15 Georgia,"Times New Roman",serif;letter-spacing:-.035em;color:var(--ink)}
+.registry h2,.registry .h5{color:var(--ink);font-weight:650}
+.workspace>h1,.folio-heading{margin-bottom:1.3rem}
+.registry .card,.report-panel,.ai-review,.verify-card,.document-panel,.empty-state,#wallet-app,#wallet-admin{background:var(--paper);border:1px solid var(--line);border-radius:16px;box-shadow:0 5px 18px #264a3810}
+.registry :is(.verify-card,.ai-review,.document-panel,.empty-state,#wallet-app,#wallet-admin){padding:clamp(18px,2.5vw,32px);margin:0 0 1.1rem}
+.registry .btn,.cover-action,.jump-link{border-radius:8px;font-weight:600}
+.registry .btn-primary,.registry .btn-primary:focus{background:var(--accent);border-color:var(--accent);color:#fff}
+.registry .btn-primary:hover{background:#164b3c}
+.registry .btn-outline-primary{color:#165e49;border-color:#91b2a1}.registry .btn-outline-primary:hover{background:var(--mint)}
+.registry .btn-outline-secondary{border-color:#bbc9bf;color:#39594b}.registry .btn-outline-secondary:hover{background:#e8efe8;color:#19392d}
+.registry :is(input.form-control,textarea.form-control,select.form-select){border-color:#b9c9bf;border-radius:8px;padding:.68rem .85rem;color:var(--ink)}
+.registry :is(.form-control,.form-select):focus{border-color:var(--accent);box-shadow:0 0 0 .2rem #31795020}
+.registry .form-label{font-weight:620}.registry input[type=checkbox]{accent-color:var(--accent)}
+.registry .table-responsive{border:1px solid var(--line);border-radius:12px;margin-bottom:18px;background:white}
+.registry .table{margin-bottom:0;vertical-align:middle;color:var(--ink)}
+.registry .table>:not(caption)>*>*{padding:.8rem .92rem;border-color:#e2e9e2}
+.registry .table thead th{background:#eaf0e8;color:#435b50;font-size:.84rem;font-weight:650}
+.registry code{color:#215e50}.registry .table .btn{margin:2px 0}
+.registry .alert{border-radius:10px;overflow-wrap:anywhere}
+.registry .alert-success{background:#e1f1e6;color:#175137;border-color:#b8d9c5}
+.registry .alert-warning{background:#fff4dd;color:#70491b;border-color:#e9d4aa}
+.registry .alert-info{background:#e8f0f0;color:#28545a;border-color:#cadcda}
+.registry .card-header{background:#eaf0e8;border-color:var(--line);padding:.9rem 1.2rem}
+.registry .workspace>.d-flex{flex-wrap:wrap;gap:.75rem}
+.workspace:is([data-action="Create"],[data-action="Edit"],[data-action="NhapCsv"],[data-action="TaoLo"]) form:not(.d-inline),.workspace[data-action="ChangePassword"] form{background:var(--paper);border:1px solid var(--line);border-radius:14px;padding:clamp(18px,2.8vw,34px);margin-bottom:1rem}
+.workspace form .form-text{color:var(--mute)}
+.workspace[data-action="AccessDenied"]>.text-center,.workspace[data-action="Error"]{padding-block:4rem}
+.workspace[data-action="AccessDenied"]>.text-center{background:#fff;border:1px solid var(--line);border-radius:16px}
+.state-pill{font:600 .78rem/1.4 "Segoe UI",sans-serif;display:inline-block;padding:4px 11px;border-radius:20px;background:#edf0ef;color:#435754}
+.state-good,.state-success,.state-da_ghi_chuoi{background:#dff0e3;color:#215937}
+.state-thu_hoi,.state-failed,.state-loi{background:#ffe7e4;color:#8b3530}
+.state-pending,.state-cho_xac_nhan{background:#fff0cf;color:#70460e}
+.cover,.cert-hero{position:relative;isolation:isolate;overflow:hidden;background:linear-gradient(110deg,#183d37,#204e42);border-radius:19px;color:white;padding:clamp(28px,4vw,64px);margin-bottom:1.3rem}
+.cover{min-height:330px;display:flex;align-items:center}.cover>div:first-child,.hero-copy{position:relative;z-index:1;max-width:61%}
+.registry :is(.cover,.cert-hero) h1{color:#fff;font-size:clamp(2.5rem,4.6vw,4.4rem);margin-bottom:.8rem}
+.cover p,.cert-hero p{max-width:520px;color:#e3ece4;line-height:1.6}
+.cover-plate,.engraving{position:absolute;right:-3%;width:42%;top:50%;transform:translateY(-50%)}
+.cover-plate img{width:100%;display:block}.engraving{aspect-ratio:1;background:url('../img/hoa-van-chung-chi.png') center/contain no-repeat}
+.seal{display:none}
+.registry .cover-action,.registry .jump-link{display:inline-flex;padding:.65rem .95rem;background:#efe4bf;color:#254538;text-decoration:none;gap:1rem}
+.quick-grid>a{display:grid;gap:.25rem;padding:1.4rem;border:1px solid var(--line);border-radius:13px;background:var(--paper);color:var(--ink);text-decoration:none}.quick-grid a span{color:var(--mute)}
+.verify-page{max-width:960px;margin:auto}.verify-card{display:flex;flex-direction:column}
+.ai-consent{display:flex;align-items:flex-start;gap:9px;font-size:.92rem;margin-bottom:1rem}.ai-consent input{margin-top:5px}
+.verify-submit{align-self:flex-start;min-width:150px;display:flex;align-items:center;justify-content:space-between;gap:14px}
+.verify-result{display:flex;gap:12px;align-items:center}.result-mark{border:1px solid currentColor;border-radius:50%;width:1.8rem;height:1.8rem;text-align:center;flex:none}
+.verify-result small{display:block}.qr-note,.folio-heading p{color:var(--mute)}
+.ai-review h2,.document-panel h2{font-size:1.25rem}.document-panel p:last-child{margin-bottom:0}
+.signin{display:grid;grid-template-columns:2fr 3fr;max-width:860px;margin:clamp(15px,5vh,70px) auto;border-radius:18px;overflow:hidden;background:var(--paper);border:1px solid var(--line)}
+.signin-art{background:var(--pine);display:grid;place-items:center}.signin-art img{width:98%}.signin-form{padding:clamp(22px,4vw,52px)}.signin-form h1{margin-bottom:1.3rem}
+.report-grid,.folio-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px;margin:1rem 0 2rem}
+.report-panel{padding:clamp(18px,2vw,32px)}.report-panel h2{font-size:1.06rem}.total,.metric .display-6{font:500 2.8rem Georgia,serif;color:var(--accent)}
+.bar-row{margin-top:.8rem}.bar-row div{display:flex;justify-content:space-between;font-size:.9rem}
+.bar-row meter{width:100%;height:10px;display:block;appearance:none;border:0;border-radius:9px;background:#e6ebe3}
+.bar-row meter::-webkit-meter-bar{border:0;background:#e6ebe3}.bar-row meter::-webkit-meter-optimum-value{background:#538973}.bar-row meter::-moz-meter-bar{background:#538973}
+.folio{min-width:0;border:1px solid #ced6ca;border-radius:15px;background:white;overflow:hidden;box-shadow:0 6px 22px #19382d0c}
+.folio-cover{padding:26px;position:relative;isolation:isolate;background:var(--pine);color:#fff;min-height:173px}
+.folio-cover::after{content:"";position:absolute;inset:0;background:url('../img/hoa-van-chung-chi.png') right -60px center/245px no-repeat;z-index:-1;opacity:.5}
+.folio-cover>div{max-width:80%}.folio-cover h2{font:500 2rem/1.25 Georgia,serif;color:white;margin:16px 0 4px;overflow-wrap:anywhere}
+.folio-cover code{color:#e9dec4}.folio-meta{display:flex;gap:30px;padding:18px 24px;margin:0}
+.folio-meta dt{font-size:.78rem;color:var(--mute);font-weight:600}.folio-meta dd{margin:2px 0 0;font-weight:600}
+.folio-actions{border-top:1px solid var(--line);padding:15px 23px;display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.link-action{border:0;background:transparent;color:#165e49;text-decoration:underline;font-size:.9rem}
+@media(min-width:1001px){.rail-nav.collapse{display:block}}
+@media(max-width:1000px){
+.rail{width:auto;position:static;overflow:visible}.rail-top{display:flex;justify-content:space-between;align-items:center;padding:12px 18px}
+.menu-toggle{display:block;color:white;border:1px solid #769386;border-radius:6px;background:none;padding:5px 12px}
+.desk{margin:0;min-height:calc(100vh - 63px)}.rail-nav{padding:0 0 2px}.nav-group{margin:10px 14px}.nav-label{padding-top:8px}
+}
+@media(max-width:700px){.report-grid,.folio-grid,.signin{grid-template-columns:1fr}.workspace{padding:20px 14px}.topline,.registry-footer{padding-inline:14px}.profile summary small{display:none}
+.cover>div:first-child,.hero-copy{max-width:100%}.cover-plate,.engraving{right:-65px;width:55%;opacity:.21}
+.signin-art{height:85px;overflow:hidden}.signin-art img{width:150px;align-self:center;margin-top:-32px}
+.verify-submit{width:100%}.registry .table>:not(caption)>*>*{padding:.6rem}.folio-cover{min-height:152px}.registry-footer{font-size:.77rem}
+}
+@media(prefers-reduced-motion:no-preference){.workspace{animation:page-in .28s ease-out}.folio,.verify-result{animation:page-in .36s ease-out}.registry :is(.btn,.rail-link,.quick-grid a,.cover-action){transition:background-color .16s ease,transform .16s ease}.registry :is(.btn:not(:disabled),.quick-grid a,.cover-action):hover{transform:translateY(-1px)}}
+@media(prefers-reduced-motion:reduce){.registry *, .registry *::before,.registry *::after{animation-duration:0s!important;transition-duration:0s!important}}
+@keyframes page-in{from{opacity:.35;transform:translateY(5px)}to{opacity:1;transform:translateY(0)}}
+@media print{.rail,.topline,.registry-footer{display:none}.desk{margin:0}.workspace{padding:0}}
+/* Group each business form without changing its field order or submission. */
+.workspace:is([data-action="Create"],[data-action="Edit"]) .col-lg-7{width:100%;max-width:760px}
+.workspace[data-action="ChangePassword"] .col-lg-4,.workspace[data-action="Setup"] .col-lg-4{width:100%;max-width:560px}
+.workspace[data-action="Index"]>.d-flex:first-child,.folio-heading{padding-bottom:16px;border-bottom:1px solid var(--line);margin-bottom:20px!important}
+.workspace[data-controller="Blockchain"]>#wallet-app,.workspace[data-controller="Blockchain"]>#wallet-admin{border-top:4px solid #48826d}
+.workspace[data-controller="Blockchain"] #wallet-status{margin-top:1rem;margin-bottom:0}
+.workspace[data-controller="Admin"] .metric{border-top:3px solid #78a98e}
+.workspace[data-controller="Admin"] .metric .card-body{padding:22px}
+.workspace[data-controller="Admin"] .h5{margin:24px 0 12px}
+.document-panel h2{margin-top:1.2rem}
+.empty-state{border-style:dashed}
+.registry .btn:disabled{opacity:.65}
+.registry .verify-submit[aria-busy=true]{cursor:progress}
+@media(min-width:850px){
+.folio-grid .folio:only-child{grid-column:1/-1;display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,1fr)}
+.folio:only-child .folio-cover{grid-row:1/3;min-height:225px;display:flex;align-items:center}
+.folio:only-child .folio-meta{align-items:end;padding:25px 26px 18px}
+.folio:only-child .folio-actions{align-content:center;padding:18px 26px}
+}

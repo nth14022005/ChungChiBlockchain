@@ -1,0 +1,44 @@
+@model NguoiHocFormViewModel
+@{
+    ViewData["Title"] = "Thêm người học";
+}
+
+<h1 class="h3 mb-3">Thêm người học</h1>
+<div class="row"><div class="col-lg-7">
+<form asp-action="Create" method="post">
+    <input type="hidden" asp-for="Id" />
+    <div asp-validation-summary="ModelOnly" class="text-danger mb-2"></div>
+    <div class="mb-3">
+        <label asp-for="MaNguoiHoc" class="form-label"></label>
+        <input asp-for="MaNguoiHoc" class="form-control text-uppercase" autofocus />
+        <div class="form-text">Chữ không dấu, số và _ . - (ví dụ SV001). Không đổi được sau khi tạo.</div>
+        <span asp-validation-for="MaNguoiHoc" class="text-danger"></span>
+    </div>
+    <div class="mb-3">
+        <label asp-for="HoTen" class="form-label"></label>
+        <input asp-for="HoTen" class="form-control" />
+        <span asp-validation-for="HoTen" class="text-danger"></span>
+    </div>
+    <div class="mb-3">
+        <label asp-for="NgaySinh" class="form-label"></label>
+        <input asp-for="NgaySinh" class="form-control" type="date" />
+        <span asp-validation-for="NgaySinh" class="text-danger"></span>
+    </div>
+    <div class="row">
+        <div class="col-md-7 mb-3">
+            <label asp-for="Email" class="form-label"></label>
+            <input asp-for="Email" class="form-control" />
+            <span asp-validation-for="Email" class="text-danger"></span>
+        </div>
+        <div class="col-md-5 mb-3">
+            <label asp-for="SoDienThoai" class="form-label"></label>
+            <input asp-for="SoDienThoai" class="form-control" />
+            <span asp-validation-for="SoDienThoai" class="text-danger"></span>
+        </div>
+    </div>
+    <button type="submit" class="btn btn-primary">Lưu</button>
+    <a class="btn btn-link" asp-action="Index">Hủy</a>
+</form>
+</div></div>
+
+@section Scripts { <partial name="_ValidationScriptsPartial" /> }

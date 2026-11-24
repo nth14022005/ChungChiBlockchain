@@ -1,0 +1,26 @@
+@model LoginViewModel
+@{
+    ViewData["Title"] = "Đăng nhập";
+}
+
+<div class="signin"><aside class="signin-art" aria-hidden="true"><img src="~/img/hoa-van-chung-chi.png" alt=""/></aside>
+<section class="signin-form"><h1>Đăng nhập</h1>
+<form asp-action="Login" method="post">
+                    <input type="hidden" asp-for="ReturnUrl" />
+                    <div asp-validation-summary="ModelOnly" class="text-danger mb-2"></div>
+
+                    <div class="mb-3">
+                        <label asp-for="TenDangNhap" class="form-label"></label>
+                        <input asp-for="TenDangNhap" class="form-control" autocomplete="username" autofocus />
+                        <span asp-validation-for="TenDangNhap" class="text-danger"></span>
+                    </div>
+                    <div class="mb-3">
+                        <label asp-for="MatKhau" class="form-label"></label>
+                        <input asp-for="MatKhau" class="form-control" autocomplete="current-password" />
+                        <span asp-validation-for="MatKhau" class="text-danger"></span>
+                    </div>
+                    <button type="submit" class="btn btn-primary w-100">Đăng nhập</button>
+                </form></section></div>
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

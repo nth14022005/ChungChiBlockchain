@@ -1,0 +1,48 @@
+@model ToChucFormViewModel
+@{
+    ViewData["Title"] = "Thêm tổ chức";
+}
+
+<h1 class="h3 mb-3">Thêm tổ chức</h1>
+<div class="row"><div class="col-lg-7">
+<form asp-action="Create" method="post">
+    <div asp-validation-summary="ModelOnly" class="text-danger mb-2"></div>
+
+    <div class="mb-3">
+        <label asp-for="MaToChuc" class="form-label"></label>
+        <input asp-for="MaToChuc" class="form-control text-uppercase" maxlength="10" autofocus />
+        <div class="form-text">2-10 ký tự chữ không dấu hoặc số (ví dụ NCTU). Không đổi được sau khi tạo.</div>
+        <span asp-validation-for="MaToChuc" class="text-danger"></span>
+    </div>
+    <div class="mb-3">
+        <label asp-for="TenToChuc" class="form-label"></label>
+        <input asp-for="TenToChuc" class="form-control" />
+        <span asp-validation-for="TenToChuc" class="text-danger"></span>
+    </div>
+    <div class="mb-3">
+        <label asp-for="DiaChi" class="form-label"></label>
+        <input asp-for="DiaChi" class="form-control" />
+        <span asp-validation-for="DiaChi" class="text-danger"></span>
+    </div>
+    <div class="row">
+        <div class="col-md-6 mb-3">
+            <label asp-for="EmailLienHe" class="form-label"></label>
+            <input asp-for="EmailLienHe" class="form-control" />
+            <span asp-validation-for="EmailLienHe" class="text-danger"></span>
+        </div>
+        <div class="col-md-6 mb-3">
+            <label asp-for="Website" class="form-label"></label>
+            <input asp-for="Website" class="form-control" placeholder="https://" />
+            <span asp-validation-for="Website" class="text-danger"></span>
+        </div>
+    </div>
+    <div class="mb-3">
+        <label asp-for="TrangThai" class="form-label"></label>
+        <select asp-for="TrangThai" asp-items="Model.DanhSachTrangThai" class="form-select"></select>
+    </div>
+    <button type="submit" class="btn btn-primary">Lưu</button>
+    <a class="btn btn-link" asp-action="Index">Hủy</a>
+</form>
+</div></div>
+
+@section Scripts { <partial name="_ValidationScriptsPartial" /> }

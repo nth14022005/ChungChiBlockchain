@@ -1,0 +1,27 @@
+@using ChungChiBlockchain.Web.Services
+@model List<LoaiChungChiItem>
+@{
+    ViewData["Title"] = "Loại chứng chỉ";
+}
+
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <h1 class="h3 mb-0">Loại chứng chỉ</h1>
+    <a class="btn btn-primary" asp-action="Create">+ Thêm loại</a>
+</div>
+<p class="text-muted small">Danh mục dùng chung cho mọi tổ chức. Các tổ chức chọn loại này khi tạo mẫu chứng chỉ.</p>
+
+<div class="table-responsive">
+    <table class="table table-hover align-middle">
+        <thead class="table-light"><tr><th>Tên loại</th><th>Mô tả</th><th></th></tr></thead>
+        <tbody>
+        @foreach (var l in Model)
+        {
+            <tr>
+                <td>@l.TenLoai</td>
+                <td class="small text-muted">@l.MoTa</td>
+                <td class="text-end"><a class="btn btn-sm btn-outline-secondary" asp-action="Edit" asp-route-id="@l.Id">Sửa</a></td>
+            </tr>
+        }
+        </tbody>
+    </table>
+</div>

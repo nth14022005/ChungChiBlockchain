@@ -1,0 +1,45 @@
+@using ChungChiBlockchain.Web.Services
+@model List<KhoaHocItem>
+@{
+    ViewData["Title"] = "Khóa học";
+}
+
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <h1 class="h3 mb-0">Khóa học</h1>
+    <a class="btn btn-primary" asp-action="Create">+ Thêm khóa học</a>
+</div>
+
+@if (Model.Count == 0)
+{
+    <div class="alert alert-info">Chưa có khóa học nào. Bấm "Thêm khóa học" để bắt đầu.</div>
+}
+else
+{
+    <div class="table-responsive">
+        <table class="table table-hover align-middle">
+            <thead class="table-light">
+                <tr><th>Mã</th><th>Tên khóa học</th><th>Thời lượng</th><th>Mô tả</th><th></th></tr>
+            </thead>
+            <tbody>
+            @foreach (var k in Model)
+            {
+                <tr>
+                    <td><code>@k.MaKhoaHoc</code></td>
+                    <td>@k.TenKhoaHoc</td>
+                    <td>@k.ThoiLuong</td>
+                    <td class="small text-muted">@k.MoTa</td>
+                    <td class="text-end text-nowrap">
+                        <a class="btn btn-sm btn-outline-secondary" asp-action="Edit" asp-route-id="@k.Id">Sửa</a>
+                        <form asp-action="Xoa" method="post" class="d-inline"
+                              onsubmit="return confirm('Xóa khóa học @k.MaKhoaHoc?');">
+                            <input type="hidden" name="id" value="@k.Id" />
+                            <button type="submit" class="btn btn-sm btn-outline-danger">Xóa</button>
+                        </form>
+                    </td>
+                </tr>
+            }
+            </tbody>
+        </table>
+    </div>
+    <p class="text-muted small">Khóa học đã có chứng chỉ được cấp thì không xóa được. Mã khóa học không đổi được sau khi tạo.</p>
+}

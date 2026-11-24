@@ -1,0 +1,17 @@
+**/bin/
+**/obj/
+.vs/
+node_modules/
+**/App_Data/
+**/Storage/
+**/storage/
+**/uploads/
+**/secrets/
+**/appsettings.Local.json
+.env
+.env.*
+*.bak
+*.mdf
+*.ldf
+*.db
+*.log

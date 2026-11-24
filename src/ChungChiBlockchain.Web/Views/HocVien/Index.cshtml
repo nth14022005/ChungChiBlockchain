@@ -1,0 +1,23 @@
+@model IReadOnlyList<ChungChiCaNhan>
+@inject IConfiguration Config
+@using ChungChiBlockchain.Web.Services
+@{ ViewData["Title"] = "Chứng chỉ của tôi"; }
+<header class="folio-heading"><h1>Chứng chỉ của tôi</h1><p>@Model.Count chứng chỉ</p></header>
+@if(Model.Count == 0) { <p class="empty-state">Bạn chưa có chứng chỉ đã phát hành.</p> }
+else {
+<div class="folio-grid">
+@foreach(var c in Model) {
+    var url = VerificationLink.Create(Config["PublicBaseUrl"], c.Ma);
+    <article class="folio">
+    <header class="folio-cover"><div><span class="state-pill state-@c.TrangThai">@BaoCaoHoatDong.Ten(c.TrangThai)</span><h2>@c.KhoaHoc</h2><code>@c.Ma</code></div></header>
+    <dl class="folio-meta"><div><dt>Ngày cấp</dt><dd>@c.NgayCap.ToString("dd/MM/yyyy")</dd></div><div><dt>Xếp loại</dt><dd>@(c.XepLoai ?? "—")</dd></div></dl>
+    <div class="folio-actions"><a class="btn btn-primary" asp-action="TaiPdf" asp-route-id="@c.Id">Tải PDF</a>
+    <a class="btn btn-outline-secondary" href="/verify/@c.Ma">Xác minh</a>
+    @if(url != null) { <button type="button" class="link-action share-link" data-url="@url">Sao chép liên kết</button> }
+    else { <small>Liên kết chia sẻ chưa được cấu hình.</small> }</div>
+    </article>
+}
+</div><p id="share-feedback" role="status"></p>
+<input id="share-manual" class="form-control" aria-label="Liên kết xác minh để sao chép" readonly hidden/>
+<script src="~/js/share-certificate.js" asp-append-version="true"></script>
+}

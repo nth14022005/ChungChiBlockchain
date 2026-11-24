@@ -1,0 +1,13 @@
+@{ ViewData["Title"] = "Trang chủ"; }
+<section class="cover">
+<div><h1>Xác thực<br/>chứng chỉ</h1>
+<p>Tra cứu hồ sơ đã phát hành và đối chiếu bản PDF với dữ liệu trên blockchain.</p>
+<a href="/verify" class="cover-action">Xác minh chứng chỉ <span aria-hidden="true">↗</span></a></div>
+<div class="cover-plate" aria-hidden="true"><img src="~/img/hoa-van-chung-chi.png" alt=""/></div>
+</section>
+<section class="quick-grid" aria-label="Truy cập nhanh">
+@if(User.IsInRole("nguoi_hoc")) { <a asp-controller="HocVien" asp-action="Index"><strong>Chứng chỉ của tôi</strong><span>Xem hồ sơ, tải PDF và chia sẻ liên kết.</span></a> }
+else if(User.IsInRole(VaiTroMa.ToChucCap)) { <a asp-controller="ChungChi" asp-action="Index"><strong>Quản lý chứng chỉ</strong><span>Xem lô cấp và trạng thái phát hành.</span></a> }
+else if(User.IsInRole(VaiTroMa.QuanTri)) { <a asp-controller="Admin" asp-action="ThongKe"><strong>Thống kê và nhật ký</strong><span>Xem các lượt xác minh và hoạt động gần đây.</span></a> }
+else if(User.Identity?.IsAuthenticated != true) { <a asp-controller="Account" asp-action="Login"><strong>Đăng nhập</strong><span>Truy cập hồ sơ và công việc của bạn.</span></a> }
+</section>

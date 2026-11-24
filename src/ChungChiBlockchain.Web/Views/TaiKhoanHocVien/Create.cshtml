@@ -1,0 +1,15 @@
+@model CapTaiKhoanHocVien
+@{ ViewData["Title"] = "Cấp tài khoản người học"; }
+<h1 class="h3">Cấp tài khoản người học</h1>
+<p>Chọn hồ sơ theo tổ chức và mã người học. Tài khoản sẽ xem được các chứng chỉ đã phát hành cho hồ sơ này.</p>
+<form method="post" asp-action="Create" class="card card-body col-lg-8">
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+    <label asp-for="NguoiHocId" class="form-label"></label>
+    <select asp-for="NguoiHocId" asp-items="Model.HoSo" class="form-select"><option value="">Chọn người học</option></select>
+    <span asp-validation-for="NguoiHocId" class="text-danger"></span>
+    <label asp-for="TenDangNhap" class="form-label mt-3"></label>
+    <input asp-for="TenDangNhap" class="form-control" maxlength="50" autocomplete="off"/>
+    <span asp-validation-for="TenDangNhap" class="text-danger"></span>
+    <div class="mt-3"><button type="submit" class="btn btn-primary">Cấp tài khoản</button>
+    <a asp-controller="NguoiDung" asp-action="Index" class="btn btn-link">Quay lại</a></div>
+</form>

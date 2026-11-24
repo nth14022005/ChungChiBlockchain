@@ -1,0 +1,16 @@
+@model List<ChungChiBlockchain.Web.Models.Entities.ViBlockchain>
+@{ViewData["Title"]="Quyền ví trên testnet";}
+<h1 class="h3">Cấp quyền ví trên testnet</h1>
+<p>Đăng nhập web bằng quản trị và kết nối MetaMask bằng <strong>ví đã triển khai hợp đồng (owner)</strong>. Ví tổ chức có thể là một tài khoản khác.</p>
+<p>Giao dịch cấp/bỏ quyền thay đổi smart contract. Sau khi đủ xác nhận, bấm Đồng bộ để đọc lại quyền từ mạng.</p>
+<div id="wallet-admin">
+@Html.AntiForgeryToken()
+<button id="connect-wallet" class="btn btn-outline-primary">Kết nối MetaMask của chủ hợp đồng</button>
+<p id="wallet-address" class="mt-2 text-break"></p><p id="wallet-contract" class="text-break text-muted"></p>
+<div id="wallet-status" class="alert alert-secondary" role="status">Chưa kết nối ví.</div><a id="transaction-link" class="d-none" target="_blank" rel="noopener noreferrer">Xem giao dịch trên Sepolia Etherscan</a>
+<div class="table-responsive"><table class="table"><thead><tr><th>Tổ chức</th><th>Ví</th><th>Trạng thái web</th><th>Thao tác</th></tr></thead><tbody>
+@foreach(var v in Model){<tr><td>@v.ToChuc.TenToChuc</td><td class="text-break">@v.DiaChiVi</td><td>@v.TrangThai</td><td><button class="btn btn-sm btn-outline-primary issuer-action" data-id="@v.Id" data-wallet="@v.DiaChiVi" data-allowed="true" disabled>Cấp quyền</button> <button class="btn btn-sm btn-outline-danger issuer-action" data-id="@v.Id" data-wallet="@v.DiaChiVi" data-allowed="false" disabled>Bỏ quyền</button> <button class="btn btn-sm btn-outline-secondary sync-issuer" data-id="@v.Id">Đồng bộ</button></td></tr>}
+</tbody></table></div>
+</div>
+<a asp-controller="ViCap" asp-action="Create">Thêm địa chỉ ví vào hệ thống</a>
+@section Scripts{<script type="module" src="~/js/metamask.js" asp-append-version="true"></script>}

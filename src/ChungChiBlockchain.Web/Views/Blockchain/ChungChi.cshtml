@@ -1,0 +1,25 @@
+@model ChungChiBlockchain.Web.Controllers.WalletCertificatePage
+@{ViewData["Title"]="Phát hành qua MetaMask";var pending=Model.Transactions.FirstOrDefault(g=>g.TrangThai=="pending");var issued=Model.Transactions.FirstOrDefault(g=>g.Loai=="cap"&&g.TrangThai=="success");}
+<h1 class="h3">Chứng chỉ @Model.Certificate.MaChungChi</h1>
+<p>@Model.Certificate.NguoiHoc.HoTen · Trạng thái: <strong><span class="state-pill state-@Model.Certificate.TrangThai">@ChungChiBlockchain.Web.Models.ViewModels.BaoCaoHoatDong.Ten(Model.Certificate.TrangThai)</span></strong></p>
+@if(!Model.Testnet){<div class="alert alert-warning">Đang dùng giả lập. Cấu hình Testnet trong VS Code trước khi kết nối MetaMask. Chứng chỉ giả lập cũ vẫn được xác minh theo dữ liệu giả lập.</div>}
+else if(issued?.HopDong.ChainId==-1){<div class="alert alert-warning">Chứng chỉ này đã cấp bằng giả lập. Hãy tạo một chứng chỉ mới để thử testnet; không chuyển bản ghi giả lập thành giao dịch thật.</div>}
+else{
+<div id="wallet-app" data-certificate="@Model.Certificate.Id" data-pending="@pending?.Id" data-kind="@pending?.Loai" data-tx="@pending?.TxHash">
+    @Html.AntiForgeryToken()
+    <div class="alert alert-info">Sepolia testnet · MetaMask sẽ hiển thị giao dịch để bạn kiểm tra và ký. Máy chủ tự xác nhận kết quả sau ít nhất 2 khối.</div>
+    <button id="connect-wallet" class="btn btn-outline-primary">Kết nối MetaMask</button><p id="wallet-address" class="mt-2 text-break"></p>
+    <p id="wallet-contract" class="text-break text-muted"></p>
+    @if(Model.Certificate.TrangThai is "nhap" or "loi" || pending?.Loai=="cap") {<button id="issue-wallet" class="btn btn-primary" disabled>Phát hành qua MetaMask</button>}
+    @if(Model.Certificate.TrangThai=="da_ghi_chuoi" || pending?.Loai=="thu_hoi") {<div class="mt-3"><label for="reason">Lý do thu hồi</label><input id="reason" class="form-control" maxlength="500"/><button id="revoke-wallet" class="btn btn-danger mt-2" disabled>Thu hồi qua MetaMask</button></div>}
+    @if(pending!=null){<p class="mt-3">Yêu cầu #@pending.Id đang chờ. Nếu đã gửi giao dịch, dùng mã giao dịch để đồng bộ; đừng ký lại.</p><label for="manual-tx">Mã giao dịch (tx hash) từ MetaMask</label><input id="manual-tx" class="form-control" maxlength="66" value="@pending.TxHash"/><button id="attach-tx" class="btn btn-outline-secondary mt-2">Đồng bộ giao dịch đã gửi</button>}
+    <div id="wallet-status" role="status" class="alert alert-secondary mt-3">Kết nối ví để bắt đầu.</div>
+    <a id="transaction-link" class="d-none" target="_blank" rel="noopener noreferrer">Xem giao dịch trên Sepolia Etherscan</a>
+</div>
+@section Scripts{<script type="module" src="~/js/metamask.js" asp-append-version="true"></script>}
+}
+<h2 class="h5 mt-4">Lịch sử giao dịch</h2>
+<div class="table-responsive"><table class="table"><thead><tr><th>Thao tác</th><th>Mạng</th><th>Trạng thái</th><th>Giao dịch</th></tr></thead><tbody>
+@foreach(var g in Model.Transactions){<tr><td>@(g.Loai switch { "cap" => "Cấp chứng chỉ", "thu_hoi" => "Thu hồi", _ => g.Loai })</td><td>@g.HopDong.TenMang</td><td><span class="state-pill state-@g.TrangThai">@(g.TrangThai switch { "success" => "Thành công", "pending" => "Chờ xác nhận", "failed" => "Thất bại", _ => g.TrangThai })</span><br/><small>@g.ThongBaoLoi</small></td><td class="text-break">@if(g.TxHash!=null&&g.HopDong.ChainId==11155111){<a href="https://sepolia.etherscan.io/tx/@g.TxHash" target="_blank" rel="noopener noreferrer">@g.TxHash</a>}else{@g.TxHash}</td></tr>}
+</tbody></table></div>
+<a asp-controller="ChungChi" asp-action="Index">Về danh sách chứng chỉ</a> · <a href="/verify/@Model.Certificate.MaChungChi">Xác minh</a>

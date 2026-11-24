@@ -1,0 +1,26 @@
+@model LoaiChungChiFormViewModel
+@{
+    ViewData["Title"] = "Thêm loại chứng chỉ";
+}
+
+<h1 class="h3 mb-3">Thêm loại chứng chỉ</h1>
+<div class="row"><div class="col-lg-7">
+<form asp-action="Create" method="post">
+    <input type="hidden" asp-for="Id" />
+    <div asp-validation-summary="ModelOnly" class="text-danger mb-2"></div>
+    <div class="mb-3">
+        <label asp-for="TenLoai" class="form-label"></label>
+        <input asp-for="TenLoai" class="form-control" autofocus />
+        <span asp-validation-for="TenLoai" class="text-danger"></span>
+    </div>
+    <div class="mb-3">
+        <label asp-for="MoTa" class="form-label"></label>
+        <input asp-for="MoTa" class="form-control" />
+        <span asp-validation-for="MoTa" class="text-danger"></span>
+    </div>
+    <button type="submit" class="btn btn-primary">Lưu</button>
+    <a class="btn btn-link" asp-action="Index">Hủy</a>
+</form>
+</div></div>
+
+@section Scripts { <partial name="_ValidationScriptsPartial" /> }

@@ -1,0 +1,47 @@
+@using ChungChiBlockchain.Web.Services
+@model List<MauChungChiItem>
+@{
+    ViewData["Title"] = "Mẫu chứng chỉ";
+}
+
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <h1 class="h3 mb-0">Mẫu chứng chỉ</h1>
+    <a class="btn btn-primary" asp-action="Create">+ Thêm mẫu</a>
+</div>
+
+@if (Model.Count == 0)
+{
+    <div class="alert alert-info">Chưa có mẫu nào. Cần ít nhất một mẫu để cấp chứng chỉ.</div>
+}
+else
+{
+    <div class="table-responsive">
+        <table class="table table-hover align-middle">
+            <thead class="table-light">
+                <tr><th>Tên mẫu</th><th>Loại chứng chỉ</th><th>Trạng thái</th><th></th></tr>
+            </thead>
+            <tbody>
+            @foreach (var m in Model)
+            {
+                <tr>
+                    <td>@m.TenMau</td>
+                    <td>@m.TenLoai</td>
+                    <td>
+                        @if (m.TrangThai) { <span class="badge bg-success">Đang dùng</span> }
+                        else { <span class="badge bg-secondary">Đã tắt</span> }
+                    </td>
+                    <td class="text-end text-nowrap">
+                        <a class="btn btn-sm btn-outline-secondary" asp-action="Edit" asp-route-id="@m.Id">Sửa</a>
+                        <form asp-action="DoiTrangThai" method="post" class="d-inline">
+                            <input type="hidden" name="id" value="@m.Id" />
+                            <input type="hidden" name="hoatDong" value="@(m.TrangThai ? "false" : "true")" />
+                            <button type="submit" class="btn btn-sm btn-outline-primary">@(m.TrangThai ? "Tắt" : "Bật")</button>
+                        </form>
+                    </td>
+                </tr>
+            }
+            </tbody>
+        </table>
+    </div>
+    <p class="text-muted small">Mẫu đã tắt không dùng để cấp chứng chỉ mới nhưng chứng chỉ cũ vẫn giữ nguyên. Hình nền và bố cục mẫu sẽ được thêm ở bước tạo PDF.</p>
+}

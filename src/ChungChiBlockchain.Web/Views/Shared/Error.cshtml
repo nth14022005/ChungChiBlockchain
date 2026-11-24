@@ -1,0 +1,6 @@
+@model ErrorViewModel
+@{ ViewData["Title"] = "Lỗi xử lý"; }
+<section class="document-panel"><h1>Yêu cầu chưa hoàn tất</h1><p>Đã xảy ra lỗi khi xử lý yêu cầu của bạn.</p>
+@if(Model.ShowRequestId) { <p>Mã yêu cầu <code>@Model.RequestId</code></p> }
+<a asp-controller="Home" asp-action="Index" class="btn btn-outline-primary">Về trang chủ</a>
+</section>

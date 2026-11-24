@@ -1,0 +1,54 @@
+@using ChungChiBlockchain.Web.Services
+@model List<ViCapItem>
+@{
+    ViewData["Title"] = "Ví cấp chứng chỉ";
+}
+
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <h1 class="h3 mb-0">Ví cấp chứng chỉ</h1>
+    <a class="btn btn-primary" asp-action="Create">+ Thêm ví</a>
+</div>
+
+<p><a class="btn btn-outline-primary" asp-controller="Blockchain" asp-action="Vi">Cấp quyền bằng MetaMask / đồng bộ testnet</a></p>
+<div class="alert alert-warning small">
+    Chỉ chuyển ví sang <strong>Hoạt động</strong> sau khi đã cấp quyền cho ví đó trong smart contract
+    (hàm <code>setIssuer</code>, do ví quản trị contract thực hiện bằng MetaMask). Trạng thái ở đây chỉ phản ánh
+    việc quản lý trong hệ thống, không tự thay đổi quyền trên blockchain.
+</div>
+
+@if (Model.Count == 0)
+{
+    <div class="alert alert-info">Chưa có ví nào. Hãy thêm tổ chức trước, rồi thêm ví cho tổ chức đó.</div>
+}
+else
+{
+    <div class="table-responsive">
+        <table class="table table-hover align-middle">
+            <thead class="table-light">
+                <tr><th>Tổ chức</th><th>Địa chỉ ví</th><th>Nhãn</th><th>Trạng thái</th><th></th></tr>
+            </thead>
+            <tbody>
+            @foreach (var v in Model)
+            {
+                <tr>
+                    <td>@v.TenToChuc</td>
+                    <td><code class="small">@v.DiaChiVi</code></td>
+                    <td>@v.Nhan</td>
+                    <td><span class="badge @TrangThaiVi.MauBadge(v.TrangThai)">@TrangThaiVi.Nhan(v.TrangThai)</span></td>
+                    <td class="text-end text-nowrap">
+                        <a class="btn btn-sm btn-outline-secondary" asp-action="Edit" asp-route-id="@v.Id">Sửa nhãn</a>
+                        @foreach (var tt in TrangThaiVi.TatCa.Where(x => x != v.TrangThai))
+                        {
+                            <form asp-action="DoiTrangThai" method="post" class="d-inline">
+                                <input type="hidden" name="id" value="@v.Id" />
+                                <input type="hidden" name="trangThai" value="@tt" />
+                                <button type="submit" class="btn btn-sm btn-outline-primary">→ @TrangThaiVi.Nhan(tt)</button>
+                            </form>
+                        }
+                    </td>
+                </tr>
+            }
+            </tbody>
+        </table>
+    </div>
+}

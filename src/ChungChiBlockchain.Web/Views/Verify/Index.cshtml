@@ -1,0 +1,47 @@
+@inject ChungChiBlockchain.Web.Services.CertificateReader Reader
+@model ChungChiBlockchain.Web.Controllers.VerifyViewModel
+@{ ViewData["Title"] = "Xác minh chứng chỉ"; }
+<div class="verify-page">
+<header class="cert-hero">
+    <div class="hero-copy"><h1>Xác minh chứng chỉ</h1>
+    <p>Tra cứu bằng mã chứng chỉ hoặc đối chiếu tệp PDF với bản đã phát hành.</p></div>
+    <div class="engraving" aria-hidden="true"><span class="seal">✓</span></div>
+</header>
+@if(Model.LaGiaLap){<div class="alert alert-warning">Chế độ GIẢ LẬP phục vụ đồ án. Kết quả này không phải xác nhận từ mạng blockchain thật.</div>}
+<form action="/verify" method="post" enctype="multipart/form-data" class="verify-card" data-verify-form>
+    @Html.AntiForgeryToken()
+    <label for="ma" class="form-label">Mã chứng chỉ</label><input id="ma" placeholder="DNC-2026-…" name="ma" value="@Model.Ma" maxlength="40" class="form-control mb-3" />
+    <label for="tep" class="form-label">PDF chứng chỉ (tối đa 5 MB)</label><input id="tep" name="tep" type="file" accept=".pdf,application/pdf" class="form-control mb-3" />
+    @if (Reader.Available)
+    {
+        <label class="ai-consent"><input type="checkbox" name="useAi" value="true" /> <span>Gửi PDF đã chọn đến Google Gemini để đọc và đối chiếu nội dung</span></label>
+    }
+    <button class="btn btn-primary verify-submit" type="submit"><span data-submit-label>Xác minh</span><span class="submit-arrow" aria-hidden="true">→</span></button>
+</form>
+@if (Model.ThongBao != null)
+{
+    <div role="status" class="verify-result alert @(Model.KetQua == "hop_le" ? "alert-success" : "alert-warning")">
+        <span class="result-mark" aria-hidden="true">@(Model.KetQua == "hop_le" ? "✓" : "!")</span>
+        <div><strong>@Model.ThongBao</strong>
+        @if (!string.IsNullOrWhiteSpace(Model.Ma)) { <small>@Model.Ma</small> }
+        </div>
+    </div>
+}
+<p class="qr-note">Quét QR để tra cứu bản ghi. Để kiểm tra tính toàn vẹn của tài liệu, hãy chọn tệp PDF gốc.</p>
+
+@if (Model.Ai is { } review)
+{
+    <section class="ai-review">
+        <h2 class="h5">Đọc và đối chiếu PDF bằng AI</h2><p>@review.Message</p>
+        @if (review.Explanation != null) { <p><strong>Diễn giải của AI (tham khảo)</strong> @review.Explanation</p> }
+        @if (review.Fields.Count > 0) {
+            <div class="table-responsive"><table class="table"><thead><tr><th>Trường</th><th>AI đọc từ PDF</th><th>Đối chiếu</th></tr></thead><tbody>
+            @foreach (var field in review.Fields) {
+                <tr><td>@field.Name</td><td>@field.ReadValue</td><td><span class="state-pill @(field.Comparison == "Khớp" ? "state-good" : "state-neutral")">@field.Comparison</span></td></tr>
+            }
+            </tbody></table></div>
+        }
+    </section>
+}
+
+</div>
